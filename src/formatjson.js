@@ -1,4 +1,3 @@
-import { eachDayOfInterval, format, isWithinInterval } from "date-fns";
 import jsonexport from "jsonexport/dist";
 
 const jsonToCSV = (json) =>
@@ -10,78 +9,58 @@ const jsonToCSV = (json) =>
     });
   });
 
-export const formatFloJson = (data) => {
-  const cycles = data.operationalData.cycles;
-  const endDate = new Date(cycles[0].period_end_date);
-  const startDate = new Date(cycles[cycles.length - 1].period_start_date);
-  const interval = eachDayOfInterval({
-    start: startDate,
-    end: endDate,
-  });
-  const parsedData = interval.map((date) => {
-    const isInInterval = cycles.find(({ period_start_date, period_end_date }) =>
-      isWithinInterval(date, {
-        start: new Date(period_start_date),
-        end: new Date(period_end_date),
-      })
-    );
-    return {
-      date: format(new Date(date), "yyyy-MM-dd"),
-      "bleeding.value": isInInterval ? "2" : "",
-      "bleeding.exclude": isInInterval ? "FALSE" : "",
-      ...extraFields,
-    };
-  });
-
-  return jsonToCSV(parsedData);
+const valueMAP = {
+  period: {
+    light: { "bleeding.value": 1, "bleeding.exclude": false },
+    medium: { "bleeding.value": 2, "bleeding.exclude": false },
+    heavy: { "bleeding.value": 3, "bleeding.exclude": false },
+  },
+  spotting: {
+    red: { "bleeding.value": 0, "bleeding.exclude": false },
+  },
+  pain: {
+    period_cramps: { "pain.cramps": true },
+    ovulation: { "pain.ovulationPain": true },
+    breast_tenderness: { "pain.tenderBreasts": true },
+  },
+  mood: {
+    happy: { "mood.happy": true },
+    sad: { "mood.sad": true },
+    sensitive: { "mood.anxious": true },
+  },
+  energy: {
+    exhausted: { "mood.fatigue": true },
+    tired: { "mood.fatigue": true },
+    fully_energized: { "mood.energetic": true },
+  },
 };
 
-const extraFields = {
-  "temperature.value": "",
-  "temperature.exclude": "",
-  "temperature.time": "",
-  "temperature.note": "",
+export const formatClueJson = (data) => {
+  let dataMap = {};
+  data.forEach((entry) => {
+    try {
+      const date = entry.date;
+      const type = entry.type;
+      const values = Array.isArray(entry.value) ? entry.value : [entry.value];
+      values.forEach((value) => {
+        const option = value.option;
+        if (valueMAP[type] && valueMAP[type][option]) {
+          dataMap[date] = { ...dataMap[date], ...valueMAP[type][option] };
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
-  "mucus.feeling": "",
-  "mucus.texture": "",
-  "mucus.value": "",
-  "mucus.exclude": "",
-  "cervix.opening": "",
-  "cervix.firmness": "",
-  "cervix.position": "",
-  "cervix.exclude": "",
-  "note.value": "",
-  "desire.value": "",
-  "sex.solo": "",
-  "sex.partner": "",
-  "sex.condom": "",
-  "sex.pill": "",
-  "sex.iud": "",
-  "sex.patch": "",
-  "sex.ring": "",
-  "sex.implant": "",
-  "sex.diaphragm": "",
-  "sex.none": "",
-  "sex.other": "",
-  "sex.note": "",
-  "pain.cramps": "",
-  "pain.ovulationPain": "",
-  "pain.headache": "",
-  "pain.backache": "",
-  "pain.nausea": "",
-  "pain.tenderBreasts": "",
-  "pain.migraine": "",
-  "pain.other": "",
-  "pain.note": "",
-  "mood.happy": "",
-  "mood.sad": "",
-  "mood.stressed": "",
-  "mood.balanced": "",
-  "mood.fine": "",
-  "mood.anxious": "",
-  "mood.energetic": "",
-  "mood.fatigue": "",
-  "mood.angry": "",
-  "mood.other": "",
-  "mood.note": "",
+  const headers = Object.values(dataMap)
+    .flatMap((entry) => Object.keys(entry))
+    .filter((value, index, self) => self.indexOf(value) === index);
+  const emptyRow = headers.reduce((acc, header) => ({ ...acc, [header]: "" }), {});
+
+  const dataCSV = Object.entries(dataMap)
+    .map(([date, value]) => ({ date: date, ...emptyRow, ...value }))
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  return jsonToCSV(dataCSV);
 };

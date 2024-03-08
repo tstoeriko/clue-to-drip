@@ -1,9 +1,13 @@
 :root {
-  --mint: #eaf2ee;
-  --orange: #e58849;
-  --purple: #3a2671;
-  --grey: rgb(103, 103, 103, 0.5);
-  --dark-mint: #69cbc1;
+  --linewidth: 50rem;
+  --max-width: 1920px;
+  --black: hsl(0, 0%, 20%);
+  --white: hsl(0, 0%, 97%);
+  --primary: hsl(100, 27%, 50%);
+  --container-border: 1rem solid var(--white);
+  --grey-dark: hsl(0, 0%, 29%);
+  --grey: hsl(0, 0%, 48%);
+  --grey-light: hsl(0, 0%, 71%);
 }
 
 body,
@@ -14,47 +18,40 @@ html {
 body {
   font-family: "Jost", sans-serif;
   font-size: 16px;
-  background-color: var(--purple);
-  color: var(--mint);
+  background-color: var(--primary);
+  color: var(--black);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
+  gap: 2em;
 }
 
 h1,
 h2 {
-  text-align: center;
-}
-
-h2 + a {
-  margin-bottom: 100px;
-  display: block;
+  margin: 0;
 }
 
 a {
-  color: var(--orange);
+  color: var(--primary);
   text-align: center;
-  text-decoration: none;
 }
 
 .download-button {
-  background-color: #e58849;
+  background-color: var(--black);
   border-radius: 2rem;
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 1.5rem;
   text-decoration: none;
   font-weight: 700;
-  margin-bottom: 0.5rem;
   width: 20rem;
   text-align: center;
-  color: var(--mint);
-  border: none;
-  min-height: 60px;
+  color: var(--white);
   margin: auto;
   display: block;
   margin-top: 40px;
+  border: none;
+  box-shadow: 0 5px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
 input[type="file"] {
@@ -73,10 +70,10 @@ input[type="file"] {
 
 .file-upload {
   position: relative;
-  background-color: var(--grey);
+  background-color: var(--white);
   padding: 30px;
   border-radius: 1em;
-  border: 2px dashed orange;
+  border: 2px solid var(--black);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -84,6 +81,7 @@ input[type="file"] {
   text-align: center;
   font-size: 20px;
   font-weight: 500;
+  box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
 }
 
 .read-error {

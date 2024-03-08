@@ -1,7 +1,7 @@
 import Alpine from "alpinejs";
 
 import { saveAs } from "file-saver";
-import { formatFloJson } from "./src/formatjson";
+import { formatClueJson } from "./src/formatjson";
 
 const readFile = (file) =>
   new Promise((resolve, reject) => {
@@ -20,7 +20,7 @@ Alpine.data("fileUpload", () => ({
     try {
       this.file = target.files[0];
       const json = await readFile(target.files[0]);
-      const readyData = await formatFloJson(JSON.parse(json));
+      const readyData = await formatClueJson(JSON.parse(json));
       this.fileToDownload = readyData;
     } catch {
       this.file = null;
