@@ -20,6 +20,11 @@
     Upload an exported clue file and you can download a CSV compatible with
     drop
   </h2>
+
+  <p>
+    Export your Clue data and extract the password-protected zip file. From that folder select the file called "measurements.json". This is the file you will upload here.
+  </p>
+
   <div x-data="fileUpload">
     <div id="FileUpload" class="file-upload">
       <input type="file" x-on:change="onUpload" accept="application/JSON" />
