@@ -16,7 +16,7 @@ const valueMAP = {
     heavy: { "bleeding.value": 3, "bleeding.exclude": false },
   },
   spotting: {
-    red: { "bleeding.value": 0, "bleeding.exclude": false },
+    red: { "bleeding.value": 0, "bleeding.exclude": true },
   },
   pain: {
     period_cramps: { "pain.cramps": true },
