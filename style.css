@@ -33,9 +33,14 @@ h2 {
   margin: 0;
 }
 
-a {
+.file-upload a {
   color: var(--primary);
   text-align: center;
+}
+
+a {
+  color: var(--white);
+  text-decoration: underline;
 }
 
 .download-button {
