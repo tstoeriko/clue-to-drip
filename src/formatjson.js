@@ -14,14 +14,18 @@ const valueMAP = {
     light: { "bleeding.value": 1, "bleeding.exclude": false },
     medium: { "bleeding.value": 2, "bleeding.exclude": false },
     heavy: { "bleeding.value": 3, "bleeding.exclude": false },
+    very_heavy: { "bleeding.value": 3, "bleeding.exclude": false },
   },
   spotting: {
     red: { "bleeding.value": 0, "bleeding.exclude": true },
+    brown: { "bleeding.value": 0, "bleeding.exclude": true },
   },
   pain: {
     period_cramps: { "pain.cramps": true },
     ovulation: { "pain.ovulationPain": true },
     breast_tenderness: { "pain.tenderBreasts": true },
+    lower_back: { "pain.backache": true },
+    headache: { "pain.headache": true },
   },
   mood: {
     happy: { "mood.happy": true },
@@ -33,6 +37,12 @@ const valueMAP = {
     tired: { "mood.fatigue": true },
     fully_energized: { "mood.energetic": true },
   },
+  discharge: {
+    atypical: { "mucus.texture": 1, "mucus.exclude": false },
+    sticky: { "mucus.texture": 1, "mucus.exclude": false },
+    creamy: { "mucus.texture": 1, "mucus.exclude": false },
+    egg_white: {"mucus.texture": 2, "mucus.exclude": false },
+  }
 };
 
 export const formatClueJson = (data) => {
